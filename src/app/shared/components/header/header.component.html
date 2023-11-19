@@ -1,0 +1,42 @@
+<!-- <ion-header [translucent]="true">
+  <ion-toolbar  color="primary">
+
+      <ion-buttons slot="secondary">
+      
+        <ion-button>
+          <ion-icon slot="icon-only" name="log-in-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    <ion-title>{{title}}</ion-title>
+  </ion-toolbar>
+</ion-header> -->
+
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <!-- ================================ -->
+  @if (page == 'inspection') {
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon slot="icon-only" name="person-outline"></ion-icon>
+      </ion-button> 
+      <ion-button>
+        <ion-icon slot="icon-only" name="ellipsis-horizontal-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  }@else if(page == 'environment') {
+    <ion-buttons slot="start">
+      <ion-button (click)="routerLink('inspection-list')">
+        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  }@else if(page == 'images') {
+    <ion-buttons slot="start">
+      <ion-button (click)="routerLink('environment-list')">
+        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  }
+    <!-- ================================ -->
+    <ion-title>{{page | uppercase}}</ion-title>
+  </ion-toolbar>
+</ion-header>

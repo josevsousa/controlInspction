@@ -7,6 +7,10 @@ import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 import { environment } from './environments/environment';
 
+// ==== FIREBASE ====
+import {AngularFireModule} from '@angular/fire/compat';
+import { IonicModule } from '@ionic/angular';
+
 if (environment.production) {
   enableProdMode();
 }
@@ -14,7 +18,10 @@ if (environment.production) {
 bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    provideIonicAngular(),
+    provideIonicAngular({mode:'md'}),
     provideRouter(routes),
+    importProvidersFrom(
+      AngularFireModule.initializeApp(environment.firebase)
+    )
   ],
 });
