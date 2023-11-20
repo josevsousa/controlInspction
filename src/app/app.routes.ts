@@ -20,11 +20,13 @@ export const routes: Routes = [
   },
   {
     path: 'environment-list',
-    loadComponent: () => import('./pages/environment-list/environment-list.page').then( m => m.EnvironmentListPage)
+    loadComponent: () => import('./pages/environment-list/environment-list.page').then( m => m.EnvironmentListPage),
+    canActivate: [AuthGuard]
   },
   {
     path: 'images-list',
-    loadComponent: () => import('./pages/images-list/images-list.page').then( m => m.ImagesListPage)
+    loadComponent: () => import('./pages/images-list/images-list.page').then( m => m.ImagesListPage),
+    canActivate: [AuthGuard]
   },
   {
     path: '**',

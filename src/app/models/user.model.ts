@@ -1,5 +1,7 @@
 export interface User {
-    uid:string,
-    nome:string,
-    email:string
+    uid?:string,
+    name?:any,
+    email:string,
+    photoUrl?: any,
+    active: boolean
 }

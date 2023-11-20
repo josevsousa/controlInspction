@@ -34,40 +34,39 @@ export class FirebaseService {
         console.log("conectado______ : " + user);
 
         // // ==== caminho do db ==== 
-        // let path = `user/${user.user.uid}`;
-        // // ==== usuario ==== 
-        // let userLS: User = {
-        //   uid: user.user.uid,
-        //   nome: user.user.displayName,
-        //   idade: '',
-        //   sexo: '',
-        //   photoUrl: user.user.photoURL,
-        //   ativo: true
-        // }
+        let path = `user/${user.user?.uid}`;
+        // ==== usuario ==== 
+        let userLS: User = {
+          uid: user.user?.uid,
+          name: user.user?.displayName,
+          email: '',
+          photoUrl: user.user?.photoURL,
+          active: true
+        }
 
         // verificar se o user ja existe
-        // this.getDocument(path)
-        //   .then(resp => {
-        //     if (resp) {
-        //       console.log('existe o user no db!')
-        //       //=== atualizar que o user esta on ===
-        //       this.updateDocument(path, {
-        //         ativo: true
-        //       }).then(user => {
-        //         // === gravar no localStorage
-        //         // this.utilsSvc.saveInLocalStore('user', resp);
-        //       }).catch(err=>console.log(err));
-        //     } else {
-        //       console.log('nao existe o user no db!');
-        //       // === gravar o user no db
-        //       this.setDocument(path, userLS).then(user=>{
-        //       // === gravar no localStorage
-        //       // this.utilsSvc.saveInLocalStore('user', userLS);
-        //       }).catch(err=>console.log("NAO GRAVOU NO FAIREBASE: "+err));
-        //     }
-        //   })
-        //   .catch(err => console.log(err))
-        //   .finally()
+        this.getDocument(path)
+          .then(resp => {
+            if (resp) {
+              console.log('existe o user no db!')
+              //=== atualizar que o user esta on ===
+              this.updateDocument(path, {
+                ativo: true
+              }).then(user => {
+                // === gravar no localStorage
+                // this.utilsSvc.saveInLocalStore('user', resp);
+              }).catch(err=>console.log(err));
+            } else {
+              console.log('nao existe o user no db!');
+              // === gravar o user no db
+              this.setDocument(path, userLS).then(user=>{
+              // === gravar no localStorage
+              // this.utilsSvc.saveInLocalStore('user', userLS);
+              }).catch(err=>console.log("NAO GRAVOU NO FAIREBASE: "+err));
+            }
+          })
+          .catch(err => console.log(err))
+          .finally()
 
       })  
       .catch(error => console.log(error));
@@ -78,7 +77,6 @@ export class FirebaseService {
     this.utilsSvc.routerLink('/');
     });
 }
-
 
 
   // =============== BASE DE DADOS FIRESTORE ================
