@@ -26,7 +26,7 @@ export class AuthPage implements OnInit {
 
   // ============== FUNCTION DO AUTH ===============
   utilRouter(){
-    this.utilSvc.routerLink('main');
+    this.utilSvc.routerLink('inspection-list');
   }
 
 }

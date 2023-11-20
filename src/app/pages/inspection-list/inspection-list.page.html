@@ -3,5 +3,13 @@
 <ion-content [fullscreen]="true" >
   <div class="ion-padding">
     <h1>Olha {{title}}!</h1>
+    
+    @for (item of inspections; track $index) {
+      <ion-item>
+        <ion-label>{{item.nome}}</ion-label>
+      </ion-item>
+    }
+    
   </div>
+
 </ion-content>

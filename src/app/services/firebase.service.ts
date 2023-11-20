@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { getFirestore, setDoc, getDoc, addDoc, doc, updateDoc, collection, collectionData, query } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
@@ -12,6 +12,7 @@ import { getStorage, uploadString, ref, getDownloadURL } from 'firebase/storage'
 export class FirebaseService {
 
 
+  firestore = inject(AngularFireStorage);
 
 
   // =============== BASE DE DADOS FIRESTORE ================
@@ -27,7 +28,7 @@ export class FirebaseService {
   async updateDocument(path: string, data: any) {
     return await updateDoc(doc(getFirestore(), path), data);
   }
-  // ==== Agregar um documento ====
+  // ==== Add um documento ====
   addDocument(path: string = "user", data: any) {
     return addDoc(collection(getFirestore(), path), data);
   }
