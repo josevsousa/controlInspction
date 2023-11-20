@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { UtilsService } from 'src/app/services/utils.service';
 
 import {EnvironmentAddPage} from '../../shared/components/environment-add/environment-add.page';
+import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
   selector: 'app-auth',
@@ -21,14 +22,15 @@ export class AuthPage implements OnInit {
   title = 'auth';
 
   utilSvc = inject(UtilsService);
+  firebaseSvc = inject(FirebaseService);
 
   ngOnInit() {
     console.log("dentro do auth")
   }
 
   // ============== FUNCTION DO AUTH ===============
-  utilRouter(){
-    this.utilSvc.routerLink('inspection-list');
+  login(){
+    this.firebaseSvc.loginGoogle();
   }
 
 

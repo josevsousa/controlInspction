@@ -14,16 +14,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
     <!-- ================================ -->
-  @if (page == 'inspection') {
-    <ion-buttons slot="end">
-      <ion-button>
-        <ion-icon slot="icon-only" name="person-outline"></ion-icon>
-      </ion-button> 
-      <ion-button>
-        <ion-icon slot="icon-only" name="ellipsis-horizontal-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  }@else if(page == 'environment') {
+ @if(page == 'environment') {
     <ion-buttons slot="start">
       <ion-button (click)="routerLink('inspection-list')">
         <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
@@ -38,15 +29,24 @@
   }
     <!-- ================================ -->
     <!-- padrao da navbar -->
-    <ion-buttons slot="start">
-      <!-- back-Button -->
-      <!-- <ion-back-button *ngIf="backButton" defaultHref="backButton"></ion-back-button> -->
-      <!-- dismiss buttom modal -->
-      <ion-button (click)="dismissModal()" *ngIf="isModal">
-        <ion-icon name="close-circle-outline"></ion-icon>
-      </ion-button>
-
-    </ion-buttons>
     <ion-title>{{page | uppercase}}</ion-title>
+    @if (isModal) {
+      <ion-buttons slot="start">
+        <!-- back-Button -->
+        <!-- <ion-back-button *ngIf="backButton" defaultHref="backButton"></ion-back-button> -->
+        <!-- dismiss buttom modal -->
+  
+        <ion-button (click)="dismissModal()">
+          <ion-icon name="close-circle-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      }
+      @else {
+      <ion-buttons slot="end">
+        <ion-button (click)="logOut()">
+          <ion-icon slot="icon-only" name="exit-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      }
   </ion-toolbar>
 </ion-header>

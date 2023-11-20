@@ -7,8 +7,7 @@ import { UtilsService } from '../services/utils.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
-
+export class NoAuthGuard implements CanActivate {
   firebaseSvc = inject(FirebaseService);
   utilsSvc = inject(UtilsService);
 
@@ -16,18 +15,18 @@ export class AuthGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
  
+      
     return new Promise((resolve) => {
         this.firebaseSvc.getAuth().onAuthStateChanged((auth)=>{
           // se o tiver um unser altenticado no firebase e no localstore
-          if(auth){
+          if(!auth){
             resolve(true);
           }
           else{
-            this.utilsSvc.routerLink('/auth');
+            this.utilsSvc.routerLink('/inspection-list');
             resolve(false);
           }
         })
     });
   }
-  
 }

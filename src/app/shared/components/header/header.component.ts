@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 
 // ============ Imports =============
 import { UtilsService } from 'src/app/services/utils.service';
+import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
   selector: 'app-header',
@@ -22,6 +23,7 @@ export class HeaderComponent {
   @Input() isModal!: boolean;
 
   utilSvc = inject(UtilsService);
+  firebaseSvc = inject(FirebaseService);
 
 
   // ============ Router =============
@@ -32,6 +34,11 @@ export class HeaderComponent {
   // =========== Modal ============
   dismissModal() {
     this.utilSvc.dismissModal();
+  }
+  
+  //============ auth ==============
+   logOut(): void{
+    this.firebaseSvc.desconectarGoogle();
   }
 
 
