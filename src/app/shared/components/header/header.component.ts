@@ -29,5 +29,10 @@ export class HeaderComponent {
     this.utilSvc.routerLink(url);
   }
 
+  // =========== Modal ============
+  dismissModal() {
+    this.utilSvc.dismissModal();
+  }
+
 
 }

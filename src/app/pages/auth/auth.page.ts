@@ -4,6 +4,8 @@ import { IonicModule } from '@ionic/angular';
 
 import { UtilsService } from 'src/app/services/utils.service';
 
+import {EnvironmentAddPage} from '../../shared/components/environment-add/environment-add.page';
+
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.page.html',
@@ -28,5 +30,6 @@ export class AuthPage implements OnInit {
   utilRouter(){
     this.utilSvc.routerLink('inspection-list');
   }
+
 
 }
