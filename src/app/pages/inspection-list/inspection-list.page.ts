@@ -23,10 +23,9 @@ export class InspectionListPage implements OnInit {
 
   title = "inspection"
   firebaseSvc = inject(FirebaseService);
-  utilSvc = inject(UtilsService);
+  utilsSvc = inject(UtilsService);
   inspections: Inspection[] = [];
   modalCtrol = inject(ModalController);
-  utilsSvc = inject(UtilsService);
 
   ngOnInit() {
     console.log('dentro da page inspection')
@@ -51,7 +50,7 @@ export class InspectionListPage implements OnInit {
 
   // ===== Atualizar o profile
   editEnvironment() {
-    console.log("dddd");
+    console.log('entrei em inpsecton-list');
     this.utilsSvc.presentMotal({
       component: InspectionAddPage,
       cssClass: 'edit-profile-modal'

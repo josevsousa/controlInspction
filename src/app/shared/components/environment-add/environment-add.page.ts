@@ -24,7 +24,6 @@ export class EnvironmentAddPage implements OnInit {
 
   // ===== Atualizar o profile
   editEnvironment() {
-    console.log("dddd");
     this.utilsSvc.presentMotal({
       component: EnvironmentAddPage,
       cssClass: 'edit-profile-modal'

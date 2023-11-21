@@ -2,4 +2,14 @@
 
 <ion-content [fullscreen]="true" class="ion-padding">
   <h1>Inspection Add</h1>
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <ion-item>
+    <ion-input label="Name" labelPlacement="floating"  formControlName="name" type="text"></ion-input>
+  </ion-item>
+  <br>
+  <ion-button block color="primary" type="submit" [disabled]="loginForm.invalid">
+    Login
+  </ion-button>
+</form>
+
 </ion-content>
