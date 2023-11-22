@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
-
 import { HeaderComponent } from 'src/app/shared/components/header/header.component';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
@@ -36,22 +35,12 @@ export class InspectionListPage implements OnInit {
     this.getInspections();
   }
 
-  // ====== Obter inspections
-  // async getInspections() {
-  //   let path = "users";
-  //   let list = this.firebaseSvc.getColletionData(path).subscribe({
-  //     next: (resp: any) => {
-  //       this.inspections = resp;
-  //     }
-  //   });
-  // }
-
   // ===  ObterUid ====
   uidUser() {
     return this.firebaseSvc.getAuth().currentUser?.uid;
   }
 
-
+  // === Obter inspections do firebase ===
   async getInspections() {
     let path = `user/${this.uidUser()}/inspections`;
     let sub = this.firebaseSvc.getColletionData(path).subscribe({
@@ -72,23 +61,21 @@ export class InspectionListPage implements OnInit {
       },
       {
         text: 'Sim Deletar',
-        handler: ()=>{
+        handler: () => {
           this.deleleInspections(inspection);
         }
       }]
     })
   }
 
-
+  // === Deletar inspection do firebase  ===
   async deleleInspections(inspection?: Inspection) {
     let path = `user/${this.uidUser()}/inspections/${inspection?.uid}`;
     console.log(path);
     const loading = await this.utilsSvc.loading();
     await loading.present();
-
     // deletar imagem se tiver
     // ==== ==== ====
-
     this.firebaseSvc.deletarDocument(path).then(async res => {
       console.log(this.inspections);
       this.inspections = this.inspections.filter(p => p.uid !== inspection?.uid);
@@ -112,9 +99,7 @@ export class InspectionListPage implements OnInit {
         .finally(() => {
           loading.dismiss();
         });
-
     });
-
   }
 
   // ===== add e upgrade de uma inspection
