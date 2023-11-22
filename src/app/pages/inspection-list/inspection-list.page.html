@@ -3,17 +3,32 @@
 <ion-content [fullscreen]="true" >
   <div class="ion-padding list-profile">
     <h1>Olha {{title}}!</h1>
-    
+  
+  <ion-list>  
     @for (item of inspections; track $index) {
+    <ion-item-sliding >
       <ion-item>
         <ion-label>{{item.name}}</ion-label>
       </ion-item>
+        <!-- === Options === -->
+        <ion-item-options>
+          <!-- Editar -->
+        <ion-item-option (click)="addUpdateInspection(item)">
+          <ion-icon class="option-btn" name="create-outline"></ion-icon>
+        </ion-item-option>
+        <!-- Deletar -->
+        <ion-item-option color="danger" side="start" (click)="confirmDeleteInspection(item)">
+          <ion-icon class="option-btn" name="trash-outline"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
     }
-    
+  </ion-list>
   </div>
 
+  <!-- new inspection -->
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-    <ion-fab-button color="success" (click)="editEnvironment()">
+    <ion-fab-button color="success" (click)="addUpdateInspection()">
       <ion-icon name="add-outline" ></ion-icon>
     </ion-fab-button>
   </ion-fab>

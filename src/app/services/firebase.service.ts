@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 
-import { getFirestore, setDoc, getDoc, addDoc, doc, updateDoc, collection, collectionData, query } from '@angular/fire/firestore';
+import { getFirestore, setDoc, getDoc, addDoc, deleteDoc, doc, updateDoc, collection, collectionData, query } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { getStorage, uploadString, ref, getDownloadURL } from 'firebase/storage';
 // auth
@@ -23,7 +23,7 @@ export class FirebaseService {
 
   // =============== AUTH ================
   // user
-  getAuth(){
+  getAuth() {
     return getAuth();
   }
   // google login
@@ -31,7 +31,6 @@ export class FirebaseService {
     return this.auth.signInWithPopup(new GoogleAuthProvider())
       .then((user) => {
         this.utilsSvc.routerLink('inspection-list');
-        console.log("conectado______ : " + user);
 
         // // ==== caminho do db ==== 
         let path = `user/${user.user?.uid}`;
@@ -55,48 +54,52 @@ export class FirebaseService {
               }).then(user => {
                 // === gravar no localStorage
                 // this.utilsSvc.saveInLocalStore('user', resp);
-              }).catch(err=>console.log(err));
+              }).catch(err => console.log(err));
             } else {
               console.log('nao existe o user no db!');
               // === gravar o user no db
-              this.setDocument(path, userLS).then(user=>{
-              // === gravar no localStorage
-              // this.utilsSvc.saveInLocalStore('user', userLS);
-              }).catch(err=>console.log("NAO GRAVOU NO FAIREBASE: "+err));
+              this.setDocument(path, userLS).then(user => {
+                // === gravar no localStorage
+                // this.utilsSvc.saveInLocalStore('user', userLS);
+              }).catch(err => console.log("NAO GRAVOU NO FAIREBASE: " + err));
             }
           })
           .catch(err => console.log(err))
           .finally()
 
-      })  
+      })
       .catch(error => console.log(error));
   }
- // ====== desconectar Usuario ====
- desconectarGoogle() {
-  this.auth.signOut().then(() => {
-    this.utilsSvc.routerLink('/');
+  // ====== desconectar Usuario ====
+  desconectarGoogle() {
+    this.auth.signOut().then(() => {
+      this.utilsSvc.routerLink('/');
     });
-}
+  }
 
-
+  
   // =============== BASE DE DADOS FIRESTORE ================
-  // ==== Setar um documento ====
-  async setDocument(path: string, data: any) {
-    return await setDoc(doc(getFirestore(), path), data);
+  // ==== Setar um documento passando um uid ====
+  setDocument(path: string, data: any) {
+    return setDoc(doc(getFirestore(), path), data);
+  }
+  // ==== Deletar um documento passando um uid ====
+  deletarDocument(path: string) {
+    return deleteDoc(doc(getFirestore(), path));
   }
   // ==== Obter um documento ====
   async getDocument(path: string) {
     return (await getDoc(doc(getFirestore(), path))).data();
   }
   // ==== Atualizar um documento ====
-  async updateDocument(path: string, data: any) {
-    return await updateDoc(doc(getFirestore(), path), data);
+  updateDocument(path: string, data: any) {
+    return updateDoc(doc(getFirestore(), path), data);
   }
-  // ==== Add um documento ====
-  addDocument(path: string = "user", data: any) {
+  // ==== Add um documento com uid gerado pelo firebase ====
+  addDocument(path: string, data: any) {
     return addDoc(collection(getFirestore(), path), data);
   }
-  // ==== Lista de user ======
+  // ==== Lista de documentos ======
   getColletionData(path: string, collectionQurey?: any) {
     const ref = collection(getFirestore(), path);
     return collectionData(query(ref, collectionQurey));
