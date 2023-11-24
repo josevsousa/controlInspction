@@ -19,9 +19,9 @@ export const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'environment-list',
+    path: 'environment-list/:inspection',
     loadComponent: () => import('./pages/environment-list/environment-list.page').then( m => m.EnvironmentListPage),
-    canActivate: [AuthGuard]
+    // canActivate: [AuthGuard]
   },
   {
     path: 'images-list',

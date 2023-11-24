@@ -7,6 +7,12 @@ import { HeaderComponent } from 'src/app/shared/components/header/header.compone
 import { UtilsService } from 'src/app/services/utils.service';
 import { EnvironmentAddPage } from 'src/app/shared/components/environment-add/environment-add.page';
 
+import { Inspection } from 'src/app/models/inspection.model';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Environment } from '../../models/environment.model';
+import { ModalController } from '@ionic/angular/standalone';
+import { FirebaseService } from 'src/app/services/firebase.service';
+
 @Component({
   selector: 'app-environment-list',
   templateUrl: './environment-list.page.html',
@@ -17,17 +23,114 @@ import { EnvironmentAddPage } from 'src/app/shared/components/environment-add/en
 export class EnvironmentListPage implements OnInit {
 
   title = 'environment';
-  utilsSvc = inject(UtilsService);
 
-  constructor() { }
+  router = inject(Router);
+  utilsSvc = inject(UtilsService);
+  firebaseSvc = inject(FirebaseService);
+  activateRoute = inject(ActivatedRoute);
+  modalCtrol = inject(ModalController);
+
+  uidInspection!: Inspection; // UID inspection
+  environments: Environment[] = []; // LISTA ambientes
+  
 
   ngOnInit() {
-    console.log("dentro do environment")
+    // uid da inspection
+    this.uidInspection = JSON.parse(this.activateRoute.snapshot.params['inspection']);
+  }
+
+   // ===  quando entrar na pagina
+   ionViewWillEnter(){
+    this.getEnvironments();
+  }
+
+
+    // ====== RouterLink =======
+    // routerLink(item: Environment){
+    //   console.log("routerLink environment-list: "+ item)
+    //   // this.router.navigate(['/environment-add', JSON.stringify(item)]);
+    // }
+
+  // ===  ObterUid ====
+  uidUser() {
+    return this.firebaseSvc.getAuth().currentUser?.uid;
+  }
+
+  // === Obter enviroments do firebase ===
+  async getEnvironments() {
+    let uidUser = await this.uidUser();
+    let path = `user/${uidUser}/inspections/${this.uidInspection}/environments`;
+    let sub = this.firebaseSvc.getColletionData(path).subscribe({
+      next: (resp: any) => {
+        this.environments = resp;
+      }
+    })
+  }
+
+  // ===== add e upgrade de uma environment
+  async addUpdateEnvironment(enviroment?: Environment) {
+    let success = this.utilsSvc.presentMotal({
+      component: EnvironmentAddPage,
+      cssClass: 'edit-profile-modal',
+      componentProps: { enviroment }
+    })
+    if (await success) this.getEnvironments()
+  }
+
+
+
+
+  // ====== Confirmar evento de delete ======
+  async confirmDeleteEnvironment(enviroment: Environment) {
+    this.utilsSvc.presentAlert({
+      header: 'Deletar Environment',
+      message: 'Deseja mesmo deletar?',
+      mode: 'ios',
+      buttons: [{
+        text: 'Cancelar'
+      },
+      {
+        text: 'Sim Deletar',
+        handler: () => {
+          this.deleleEnvironment(enviroment);
+        }
+      }]
+    })
+  }
+
+  // === Deletar inspection do firebase  ===
+  async deleleEnvironment(enviroment?: Environment) {
+    let path = `user/${this.uidUser()}/inspections/${enviroment?.uid}`;
+
+    const loading = await this.utilsSvc.loading();
+    await loading.present();
+
+    this.firebaseSvc.deletarDocument(path)
+      .then(async res => {
+        // toast alerta 
+        this.utilsSvc.presentToast({
+          message: "Inspection Deletado!",
+          duration: 1500,
+          color: 'success',
+          position: 'middle',
+          icon: 'alert-circle-outline'
+        })
+          .catch(error => this.utilsSvc.presentToast({
+            message: error.message,
+            duration: 2500,
+            color: 'primary',
+            position: 'middle',
+            icon: 'alert-circle-outline'
+          })
+          )
+          .finally(() => {
+            loading.dismiss();
+          });
+      });
   }
 
   // ===== Atualizar o profile
   editEnvironment() {
-    console.log("dddd");
     this.utilsSvc.presentMotal({
       component: EnvironmentAddPage,
       cssClass: 'edit-profile-modal'

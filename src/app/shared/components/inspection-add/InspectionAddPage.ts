@@ -26,6 +26,7 @@ export class InspectionAddPage implements OnInit {
     uid: new FormControl(''),
     active: new FormControl(true),
     name: new FormControl('', [Validators.required, Validators.min(0)]),
+    image: new FormControl(''),
     data_inicio: new FormControl(Date.now()),
     data_fim: new FormControl(undefined)
   });
@@ -33,10 +34,17 @@ export class InspectionAddPage implements OnInit {
   ngOnInit() {
     console.log('dentro de inspection-add');
     if (this.inspection) this.form.setValue(this.inspection);
+    console.log(this.inspection)
   }
 
+    //=========== Tirar/Selecionar Photo ==========
+    async takeImage(){
+      const dataUrl = (await this.utilsSvc.takePicture('Image do produto')).dataUrl;
+      this.form.controls.image.setValue(dataUrl!);
+    }
+
   onSubmit() {
-    // console.log(this.form.value);
+    console.log(this.form.value);
     if (this.form.valid) {
       if (this.inspection) {
         this.updateInspection();
@@ -58,10 +66,13 @@ export class InspectionAddPage implements OnInit {
     await loading.present();
 
 
+    // === Suber imagem e obter a url ====
+    let dataUrl = this.form.value.image;
+    let imagePath = `${this.uidUser}/${newUid}/${Date.now()}`;
+    let imageUrl = await this.firebaseSvc.uploadImage(imagePath, dataUrl!);
+    this.form.controls.image.setValue(imageUrl);
 
 
-    // se tiver imagem subir aqui
-    // ===== === ==== ===
     // ==== add inspection
     this.firebaseSvc.setDocument(path, this.form.value)
       .then(async (res) => {
@@ -92,9 +103,20 @@ export class InspectionAddPage implements OnInit {
   // ===== update inspection =====
   async updateInspection() {
     let path = `user/${this.uidUser}/inspections/${this.inspection.uid}`;
+    
 
     const loading = await this.utilsSvc.loading();
     await loading.present();
+
+       // === Subir imagem, atualizar e obter a url ====
+       if(this.form.value.image !== this.inspection.image){
+        let dataUrl = this.form.value.image;
+        let imagePath = await this.firebaseSvc.getFilePath(this.inspection.image);
+        console.log("imagePath======:"+imagePath);
+        let imageUrl = await this.firebaseSvc.uploadImage(imagePath, dataUrl!)!;
+        this.form.controls.image.setValue(imageUrl);
+       }
+  
 
     delete this.form.value.uid;
 

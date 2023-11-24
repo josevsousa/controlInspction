@@ -11,6 +11,8 @@ import {
   AlertOptions,
   ModalController,
 } from '@ionic/angular/standalone';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+
 
 
 @Injectable({
@@ -24,6 +26,22 @@ export class UtilsService {
   toastCtrl = inject(ToastController);
   loadingCtrl = inject(LoadingController);
   alertCtrl = inject(AlertController);
+
+
+  // ========== Camera ==========
+  async takePicture(promptLabelHeader: string) {
+    return await Camera.getPhoto({
+      quality: 90,
+      allowEditing: true,
+      resultType: CameraResultType.DataUrl,
+      source: CameraSource.Prompt,
+      promptLabelHeader,
+      promptLabelPhoto: 'Selecione uma imagen',
+      promptLabelPicture: 'Tirar uma photo'
+  
+    });
+  };
+
 
   // ============ Modal =============
   // abre modal

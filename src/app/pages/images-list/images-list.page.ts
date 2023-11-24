@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 import { HeaderComponent } from 'src/app/shared/components/header/header.component';
 import { UtilsService } from 'src/app/services/utils.service';
 import { ImagesAddPage } from 'src/app/shared/components/images-add/images-add.page';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-images-list',
@@ -16,12 +17,17 @@ import { ImagesAddPage } from 'src/app/shared/components/images-add/images-add.p
 })
 export class ImagesListPage implements OnInit {
 
+  
+  route = inject(ActivatedRoute);
+  environment!: any;
+
   title = "images";
   utilsSvc = inject(UtilsService);
 
 
   ngOnInit() {
-    console.log("dentro de images-list")
+    console.log("dentro de images-list");
+    // this.inspection = JSON.parse(this.route.snapshot.params['inspection']);
   }
 
   

@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 
 import { getFirestore, setDoc, getDoc, addDoc, deleteDoc, doc, updateDoc, collection, collectionData, query } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
-import { getStorage, uploadString, ref, getDownloadURL } from 'firebase/storage';
+import { getStorage, uploadString, ref, getDownloadURL, deleteObject } from 'firebase/storage';
 // auth
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { GoogleAuthProvider, getAuth } from '@angular/fire/auth';
@@ -111,5 +111,13 @@ export class FirebaseService {
       return getDownloadURL(ref(getStorage(), path))
     })
   }
+    // =============== Obter rota da image com sua url ================
+    async getFilePath(url: string){
+      return ref(getStorage(), url).fullPath
+    }
+    // =============== Deletar arquivo =================
+    deletarFile(path: string){
+      return deleteObject(ref(getStorage(), path));
+    }
 
 }

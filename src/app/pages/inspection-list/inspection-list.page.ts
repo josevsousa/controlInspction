@@ -9,6 +9,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { Inspection } from 'src/app/models/inspection.model';
 import { ModalController } from '@ionic/angular/standalone';
 import { InspectionAddPage } from 'src/app/shared/components/inspection-add/InspectionAddPage';
+import { Router, RouterLink } from '@angular/router';
 
 
 @Component({
@@ -16,7 +17,7 @@ import { InspectionAddPage } from 'src/app/shared/components/inspection-add/Insp
   templateUrl: './inspection-list.page.html',
   styleUrls: ['./inspection-list.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HeaderComponent]
+  imports: [IonicModule, CommonModule, FormsModule, HeaderComponent, RouterLink]
 })
 export class InspectionListPage implements OnInit {
 
@@ -25,6 +26,7 @@ export class InspectionListPage implements OnInit {
   utilsSvc = inject(UtilsService);
   inspections: Inspection[] = [];
   modalCtrol = inject(ModalController);
+  router = inject(Router);
 
   ngOnInit() {
     console.log('dentro da page inspection')
@@ -43,11 +45,17 @@ export class InspectionListPage implements OnInit {
   // === Obter inspections do firebase ===
   async getInspections() {
     let path = `user/${this.uidUser()}/inspections`;
+    console.log(path);
     let sub = this.firebaseSvc.getColletionData(path).subscribe({
       next: (resp: any) => {
         this.inspections = resp;
       }
     })
+  }
+
+  // ====== RouterLink =======
+  routerLink(item: Inspection){
+    this.router.navigate(['/environment-list', JSON.stringify(item.uid)]);
   }
 
 
@@ -56,6 +64,7 @@ export class InspectionListPage implements OnInit {
     this.utilsSvc.presentAlert({
       header: 'Deletar Inspection',
       message: 'Deseja mesmo deletar?',
+      mode: 'ios',
       buttons: [{
         text: 'Cancelar'
       },
@@ -71,35 +80,36 @@ export class InspectionListPage implements OnInit {
   // === Deletar inspection do firebase  ===
   async deleleInspections(inspection?: Inspection) {
     let path = `user/${this.uidUser()}/inspections/${inspection?.uid}`;
-    console.log(path);
+
     const loading = await this.utilsSvc.loading();
     await loading.present();
-    // deletar imagem se tiver
-    // ==== ==== ====
-    this.firebaseSvc.deletarDocument(path).then(async res => {
-      console.log(this.inspections);
-      this.inspections = this.inspections.filter(p => p.uid !== inspection?.uid);
-      console.log(this.inspections);
 
-      this.utilsSvc.presentToast({
-        message: "Inspection Deletado!",
-        duration: 1500,
-        color: 'success',
-        position: 'middle',
-        icon: 'alert-circle-outline'
-      })
-        .catch(error => this.utilsSvc.presentToast({
-          message: error.message,
-          duration: 2500,
-          color: 'primary',
+     // ====== deletar img ======
+     let imagePath = await this.firebaseSvc.getFilePath(inspection!.image);
+     await this.firebaseSvc.deletarFile(imagePath);
+
+    this.firebaseSvc.deletarDocument(path)
+      .then(async res => {
+        // toast alerta 
+        this.utilsSvc.presentToast({
+          message: "Inspection Deletado!",
+          duration: 1500,
+          color: 'success',
           position: 'middle',
           icon: 'alert-circle-outline'
         })
-        )
-        .finally(() => {
-          loading.dismiss();
-        });
-    });
+          .catch(error => this.utilsSvc.presentToast({
+            message: error.message,
+            duration: 2500,
+            color: 'primary',
+            position: 'middle',
+            icon: 'alert-circle-outline'
+          })
+          )
+          .finally(() => {
+            loading.dismiss();
+          });
+      });
   }
 
   // ===== add e upgrade de uma inspection
