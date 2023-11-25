@@ -53,14 +53,14 @@ export class FirebaseService {
                 ativo: true
               }).then(user => {
                 // === gravar no localStorage
-                // this.utilsSvc.saveInLocalStore('user', resp);
+                this.utilsSvc.saveInLocalStorage('user', resp);
               }).catch(err => console.log(err));
             } else {
               console.log('nao existe o user no db!');
               // === gravar o user no db
               this.setDocument(path, userLS).then(user => {
                 // === gravar no localStorage
-                // this.utilsSvc.saveInLocalStore('user', userLS);
+                this.utilsSvc.saveInLocalStorage('user', userLS);
               }).catch(err => console.log("NAO GRAVOU NO FAIREBASE: " + err));
             }
           })
@@ -72,9 +72,9 @@ export class FirebaseService {
   }
   // ====== desconectar Usuario ====
   desconectarGoogle() {
-    this.auth.signOut().then(() => {
-      this.utilsSvc.routerLink('/');
-    });
+    this.auth.signOut();
+    localStorage.removeItem('user');
+    this.utilsSvc.routerLink('/');
   }
 
   
@@ -106,7 +106,7 @@ export class FirebaseService {
   }
 
   // =============== upload de image ================
-  async uploadImage(path: string, data_url: string) {
+  async uploadImage(path: string, data_url: any) {
     return uploadString(ref(getStorage(), path), data_url, 'data_url').then(() => {
       return getDownloadURL(ref(getStorage(), path))
     })

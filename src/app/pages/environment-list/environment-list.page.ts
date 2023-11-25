@@ -32,25 +32,24 @@ export class EnvironmentListPage implements OnInit {
 
   uidInspection!: Inspection; // UID inspection
   environments: Environment[] = []; // LISTA ambientes
-  
+
 
   ngOnInit() {
     // uid da inspection
     this.uidInspection = JSON.parse(this.activateRoute.snapshot.params['inspection']);
   }
 
-   // ===  quando entrar na pagina
-   ionViewWillEnter(){
+  // ===  quando entrar na pagina
+  ionViewWillEnter() {
     this.getEnvironments();
   }
+  // ====== RouterLink =======
+  // routerLink(item: Environment){
+  //   console.log("routerLink environment-list: "+ item)
+  //   // this.router.navigate(['/environment-add', JSON.stringify(item)]);
+  // }
 
-
-    // ====== RouterLink =======
-    // routerLink(item: Environment){
-    //   console.log("routerLink environment-list: "+ item)
-    //   // this.router.navigate(['/environment-add', JSON.stringify(item)]);
-    // }
-
+  
   // ===  ObterUid ====
   uidUser() {
     return this.firebaseSvc.getAuth().currentUser?.uid;
@@ -67,17 +66,10 @@ export class EnvironmentListPage implements OnInit {
     })
   }
 
-  // ===== add e upgrade de uma environment
-  async addUpdateEnvironment(enviroment?: Environment) {
-    let success = this.utilsSvc.presentMotal({
-      component: EnvironmentAddPage,
-      cssClass: 'edit-profile-modal',
-      componentProps: { enviroment }
-    })
-    if (await success) this.getEnvironments()
+  // ====== RouterLink =======
+  routerLink(item: Inspection) {
+    this.router.navigate(['/images-list', JSON.stringify(item.uid)]);
   }
-
-
 
 
   // ====== Confirmar evento de delete ======
@@ -105,11 +97,15 @@ export class EnvironmentListPage implements OnInit {
     const loading = await this.utilsSvc.loading();
     await loading.present();
 
+    // ====== deletar img ======
+    let imagePath = await this.firebaseSvc.getFilePath(enviroment!.image);
+    await this.firebaseSvc.deletarFile(imagePath);
+
     this.firebaseSvc.deletarDocument(path)
       .then(async res => {
         // toast alerta 
         this.utilsSvc.presentToast({
-          message: "Inspection Deletado!",
+          message: "Environment Delected!",
           duration: 1500,
           color: 'success',
           position: 'middle',
@@ -129,15 +125,16 @@ export class EnvironmentListPage implements OnInit {
       });
   }
 
-  // ===== Atualizar o profile
-  editEnvironment() {
-    this.utilsSvc.presentMotal({
+  
+  // ===== add e upgrade de uma environment
+  async addUpdateEnvironment(enviroment?: Environment, uidInspection? : Inspection) {
+    let success = this.utilsSvc.presentMotal({
       component: EnvironmentAddPage,
-      cssClass: 'edit-profile-modal'
-    }).finally(() => {
-      // atualizar o user de localStorage
-      // this.getUserLS(); 
-    });
+      cssClass: 'edit-profile-modal',
+      componentProps: { enviroment, uidInspection }
+    })
+    if (await success) this.getEnvironments()
   }
+
 
 }

@@ -15,7 +15,7 @@
        <!-- === Options === -->
        <ion-item-options>
          <!-- Editar -->
-       <ion-item-option>
+       <ion-item-option (click)="addUpdateEnvironment(item, this.uidInspection)" >
          <ion-icon class="option-btn" name="create-outline"></ion-icon>
        </ion-item-option>
        <!-- Deletar -->
@@ -30,7 +30,7 @@
  </div>
 
   <ion-fab  slot="fixed" vertical="bottom" horizontal="end">
-    <ion-fab-button (click)="addUpdateEnvironment()" color="success">
+    <ion-fab-button (click)="addUpdateEnvironment(undefined, this.uidInspection)" color="success">
       <ion-icon name="add-outline" ></ion-icon>
     </ion-fab-button>
   </ion-fab>

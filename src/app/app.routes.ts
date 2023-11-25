@@ -14,23 +14,26 @@ export const routes: Routes = [
     canActivate: [NoAuthGuard]
   },
   {
-    path: 'inspection-list',
-    loadComponent: () => import('./pages/inspection-list/inspection-list.page').then( m => m.InspectionListPage),
+    path: 'inspecao',
+    loadComponent: () => import('./pages/inspecao/inspecao.page').then( m => m.InspecaoPage),
     canActivate: [AuthGuard]
   },
   {
-    path: 'environment-list/:inspection',
-    loadComponent: () => import('./pages/environment-list/environment-list.page').then( m => m.EnvironmentListPage),
+    path: 'ambiente/:uidInspecao',
+    loadComponent: () => import('./pages/ambiente/ambiente.page').then( m => m.AmbientePage),
+    canActivate: [AuthGuard]
+  },
+
+  // {
+    // path: 'environment-list/:inspection',
+    // loadComponent: () => import('./pages/environment-list/environment-list.page').then( m => m.EnvironmentListPage),
     // canActivate: [AuthGuard]
-  },
-  {
-    path: 'images-list',
-    loadComponent: () => import('./pages/images-list/images-list.page').then( m => m.ImagesListPage),
-    canActivate: [AuthGuard]
-  },
+  // },
   {
     path: '**',
     redirectTo: '/',
     pathMatch: 'full'
   }
+
+
 ];

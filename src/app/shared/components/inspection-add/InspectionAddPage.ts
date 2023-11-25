@@ -44,20 +44,24 @@ export class InspectionAddPage implements OnInit {
     }
 
   onSubmit() {
-    console.log(this.form.value);
-    if (this.form.valid) {
-      if (this.inspection) {
-        this.updateInspection();
-      }
-      else {
-        this.createInspection();
-      };
-    }
+
+    console.log("onSubmit : "+this.form.value);
+    // if (this.form.valid) {
+    //   if (this.inspection) {
+    //     console.log("tem uma inspecao");
+    //     this.updateInspection();
+    //   }
+    //   else {
+    //     console.log("nao tem uma inspecao");
+    //     this.createInspection();
+    //   };
+    // }
   }
 
 
   // ===== create inspection ===
   async createInspection() {
+    
     let newUid = Date.now();
     let path = `user/${this.uidUser}/inspections/${newUid}`;
     this.form.controls.uid.setValue(`${newUid}`);
@@ -117,7 +121,6 @@ export class InspectionAddPage implements OnInit {
         this.form.controls.image.setValue(imageUrl);
        }
   
-
     delete this.form.value.uid;
 
     this.firebaseSvc.updateDocument(path, this.form.value)

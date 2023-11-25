@@ -38,7 +38,7 @@ export class UtilsService {
       promptLabelHeader,
       promptLabelPhoto: 'Selecione uma imagen',
       promptLabelPicture: 'Tirar uma photo'
-  
+
     });
   };
 
@@ -57,7 +57,7 @@ export class UtilsService {
   }
 
 
-  
+
   // ========== Alert =========
   async presentAlert(opts?: AlertOptions) {
     const alert = await this.alertCtrl.create(opts);
@@ -79,6 +79,18 @@ export class UtilsService {
   routerLink(url: string) {
     return this.router.navigateByUrl(url);
   }
+
+  // ============ Guarda um elemento no localstore  =============
+  saveInLocalStorage(key: string, value: any) {
+    return localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  // ============ Obtem um elemento no localstore  =============
+  getFromLocalStorage(key: string) {
+    return JSON.parse(localStorage.getItem(key)!);
+
+  }
+
 
 
 }

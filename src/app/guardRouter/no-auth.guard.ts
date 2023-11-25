@@ -23,7 +23,7 @@ export class NoAuthGuard implements CanActivate {
             resolve(true);
           }
           else{
-            this.utilsSvc.routerLink('/inspection-list');
+            this.utilsSvc.routerLink('/inspecao');
             resolve(false);
           }
         })
