@@ -4,9 +4,10 @@
 }
 
 ion-avatar {
-    width: 200px;
-    height: 160px;
-    --border-radius: 15px;
     margin: 0 auto;
     padding: 7px;
+    width: 64px !important;
+    height: 64px !important;
+    --border-radius: 8px !important;
+    
 }

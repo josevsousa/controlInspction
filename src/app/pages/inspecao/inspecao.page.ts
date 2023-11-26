@@ -8,7 +8,6 @@ import { HeaderComponent } from 'src/app/shared/components/header/header.compone
 import { AddEditInspecaoComponent } from 'src/app/shared/components/add-edit-inspecao/add-edit-inspecao.component';
 import { UtilsService } from 'src/app/services/utils.service';
 import { Inspecao } from 'src/app/models/inspecao.model';
-import { Inspection } from 'src/app/models/inspection.model';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { Router, RouterLink } from '@angular/router';
 import { ModalController } from '@ionic/angular/standalone';
@@ -31,7 +30,7 @@ export class InspecaoPage implements OnInit {
   //==================================== ATRIBUTOS
   title: string = "inpecao";
   path!: string;
-  inspecoes: Inspection[] = [];
+  inspecoes: Inspecao[] = [];
   uidUser!: string;
 
   //==================================== COMPORTAMENTOS
@@ -53,24 +52,76 @@ export class InspecaoPage implements OnInit {
     let sub = this.firebaseSvc.getColletionData(path).subscribe({
       next: (resp: any) => {
         this.inspecoes = resp;
-        console.log(resp)
       }
     })
   }
-  // ====== RouterLink =======
-  routerLink(item: Inspection) {
+  // ====== RouterLink =======  
+  routerLink(item: Inspecao) {
     this.router.navigate(['/ambiente', JSON.stringify(item.uid)]);
   }
 
   // === addUpdateInspecao ====
-  async addUpdateInspection(inspecao?: Inspecao) {
-    // console.log(inspection)
+  async addUpdateInspection(inspecao?: any) {
     let success = this.utilsSvc.presentMotal({
       component: AddEditInspecaoComponent,
       cssClass: 'edit-profile-modal',
       componentProps: { inspecao }
     })
-    // if (await success) this.getInspections()
+    if (await success) this.getInspections()
   }
 
+
+  // ====== Confirmar evento de delete ======
+  async confirmDeleteInspection(inspection: Inspecao) {
+    this.utilsSvc.presentAlert({
+      header: 'Deletar Inspection',
+      message: 'Deseja mesmo deletar?',
+      mode: 'ios',
+      buttons: [{
+        text: 'Cancelar'
+      },
+      {
+        text: 'Sim Deletar',
+        handler: () => {
+          this.deleleInspections(inspection);
+        }
+      }]
+    })
+  }
+
+  // === Deletar inspection do firebase  ===
+  async deleleInspections(inspecao?: Inspecao) {
+    let path = `users/${this.uidUser}/inspecoes/${inspecao?.uid}`;
+
+    const loading = await this.utilsSvc.loading();
+    await loading.present();
+
+    // ====== deletar img ======
+    let imagePath = await this.firebaseSvc.getFilePath(inspecao!.image);
+    await this.firebaseSvc.deletarFile(imagePath);
+
+    this.firebaseSvc.deletarDocument(path)
+      .then(async res => {
+        // toast alerta 
+        this.utilsSvc.presentToast({
+          message: "Inspeção Eliminada!",
+          duration: 1500,
+          color: 'success',
+          position: 'middle',
+          icon: 'alert-circle-outline'
+        })
+          .catch(error => this.utilsSvc.presentToast({
+            message: error.message,
+            duration: 2500,
+            color: 'primary',
+            position: 'middle',
+            icon: 'alert-circle-outline'
+          })
+          )
+          .finally(() => {
+            loading.dismiss();
+          });
+      });
+
+  }
 }

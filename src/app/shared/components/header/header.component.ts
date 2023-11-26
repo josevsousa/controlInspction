@@ -37,8 +37,8 @@ export class HeaderComponent {
   }
   
   //============ auth ==============
-   logOut(): void{
-    this.firebaseSvc.desconectarGoogle();
+  logOut(){
+    return this.firebaseSvc.desconectarGoogle();
   }
 
 

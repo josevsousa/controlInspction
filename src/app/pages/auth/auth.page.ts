@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 
 import { UtilsService } from 'src/app/services/utils.service';
-
-import {EnvironmentAddPage} from '../../shared/components/environment-add/environment-add.page';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({

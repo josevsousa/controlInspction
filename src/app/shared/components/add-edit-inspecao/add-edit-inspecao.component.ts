@@ -16,15 +16,17 @@ import { Inspecao } from 'src/app/models/inspecao.model';
 })
 export class AddEditInspecaoComponent  implements OnInit {
   title!: string;
+  
+  @Input() inspecao: any;
   firebaseSvc = inject(FirebaseService);
   utilsSvc = inject(UtilsService);
-  @Input() inspecao: any;
   uidUser!: string;
+
   form = new FormGroup({
     uid: new FormControl(''),
     image: new FormControl(''),
     ativo: new FormControl(true),
-    name: new FormControl('', [Validators.required, Validators.min(0)]),
+    nome: new FormControl('', [Validators.required, Validators.min(0)]),
     data_inicio: new FormControl(Date.now()),
     data_fim: new FormControl(null)
   });
@@ -33,15 +35,16 @@ export class AddEditInspecaoComponent  implements OnInit {
   ngOnInit() {
     console.log('dentro da add-edit-inspecao');
     this.uidUser = this.utilsSvc.getFromLocalStorage('user').uid;
-    if(this.inspecao !== undefined) this.form.setValue(this.inspecao);
-    if(this.inspecao == undefined){
+    console.log(this.form.value)
+    if(this.inspecao) {
+      // recebeu uma inspecao
+      this.form.setValue(this.inspecao);    
+      this.title = "Editar Inspecao";
+    }else{
       // nao recebeu uma inspecao
       this.title = "Nova Inspecao";
-    }else{
-      // recebeu uma inspecao
-      this.title = "Editar Inspecao";
-      this.form = this.inspecao; 
-    }
+    };
+
   }
 
     //=========== Tirar/Selecionar Photo ==========
@@ -53,10 +56,11 @@ export class AddEditInspecaoComponent  implements OnInit {
     onSubmit(){
       if (this.form.valid) {
         if (this.inspecao) {
-          // this.updateInspection();
+          this.updateInspection();
           console.log("aquiiiiiii")
         }
         else {
+
           this.criarInspecao();
         };
       }
@@ -79,7 +83,7 @@ export class AddEditInspecaoComponent  implements OnInit {
       this.form.controls.image.setValue(imageUrl);
       }
 
-      // ==== add inspecao
+      // // ==== add inspecao
       this.firebaseSvc.setDocument(path, this.form.value)
         .then(async (res) => {
           this.utilsSvc.dismissModal({ success: true });
@@ -105,5 +109,52 @@ export class AddEditInspecaoComponent  implements OnInit {
 
 
     }
+
+    
+  // ===== update inspection =====
+  async updateInspection() {
+    let path = `users/${this.uidUser}/inspecoes/${this.inspecao.uid}`;
+    
+
+    const loading = await this.utilsSvc.loading();
+    await loading.present();
+
+      // === Subir imagem, atualizar e obter a url ====
+       if(this.form.value.image !== this.inspecao.image){
+        let dataUrl = this.form.value.image;
+        let imagePath = await this.firebaseSvc.getFilePath(this.inspecao.image);
+        // console.log("imagePath======:"+imagePath);
+        let imageUrl = await this.firebaseSvc.uploadImage(imagePath, dataUrl!)!;
+        this.form.controls.image.setValue(imageUrl);
+       }
+  
+    // delete this.form.value.uid;
+    this.firebaseSvc.updateDocument(path, this.form.value)
+      .then(async (resp) => {
+        this.utilsSvc.dismissModal({ success: true });
+        this.utilsSvc.presentToast({
+          message: 'Inspection Atualizado existosament',
+          duration: 1500,
+          color: 'success',
+          position: 'middle',
+          icon: 'checkmark-circle-outline'
+        });
+      })
+      .catch(error => this.utilsSvc.presentToast({
+        message: error.message,
+        duration: 2500,
+        color: 'danger',
+        position: 'middle',
+        icon: 'alert-circle-outline'
+      })
+      )
+      .finally(() => {
+        loading.dismiss();
+      });
+
+  }
+
+
+
 
 }

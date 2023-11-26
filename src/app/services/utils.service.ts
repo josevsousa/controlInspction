@@ -49,7 +49,10 @@ export class UtilsService {
     const modal = await this.modalCtrl.create(opts);
     await modal.present();
     const { data } = await modal.onWillDismiss();
-    if (data) return data;
+    if (data) {
+      console.log(data)
+      return data
+    };
   }
   // fecha modal
   dismissModal(data?: any) {

@@ -30,10 +30,10 @@ export class FirebaseService {
   loginGoogle() {
     return this.auth.signInWithPopup(new GoogleAuthProvider())
       .then((user) => {
-        this.utilsSvc.routerLink('inspection-list');
+        this.utilsSvc.routerLink('inspecao');
 
         // // ==== caminho do db ==== 
-        let path = `user/${user.user?.uid}`;
+        let path = `users/${user.user?.uid}`;
         // ==== usuario ==== 
         let userLS: User = {
           uid: user.user?.uid,
@@ -72,9 +72,10 @@ export class FirebaseService {
   }
   // ====== desconectar Usuario ====
   desconectarGoogle() {
-    this.auth.signOut();
-    localStorage.removeItem('user');
-    this.utilsSvc.routerLink('/');
+    this.auth.signOut().then(()=> {
+      localStorage.removeItem('user');
+      this.utilsSvc.routerLink('/auth');
+    });
   }
 
   
@@ -93,6 +94,8 @@ export class FirebaseService {
   }
   // ==== Atualizar um documento ====
   updateDocument(path: string, data: any) {
+    console.log(path);
+    console.log(data);
     return updateDoc(doc(getFirestore(), path), data);
   }
   // ==== Add um documento com uid gerado pelo firebase ====

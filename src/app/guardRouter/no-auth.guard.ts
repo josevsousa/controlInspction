@@ -18,7 +18,7 @@ export class NoAuthGuard implements CanActivate {
       
     return new Promise((resolve) => {
         this.firebaseSvc.getAuth().onAuthStateChanged((auth)=>{
-          // se o tiver um unser altenticado no firebase e no localstore
+          // se nao tiver um unser altenticado no firebase e no localstore
           if(!auth){
             resolve(true);
           }

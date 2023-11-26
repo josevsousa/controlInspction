@@ -21,7 +21,7 @@ export const routes: Routes = [
   {
     path: 'ambiente/:uidInspecao',
     loadComponent: () => import('./pages/ambiente/ambiente.page').then( m => m.AmbientePage),
-    canActivate: [AuthGuard]
+    // canActivate: [AuthGuard]
   },
 
   // {

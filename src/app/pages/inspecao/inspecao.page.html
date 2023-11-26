@@ -15,16 +15,16 @@
             </ion-avatar>
             <ion-icon class="image-icon" *ngIf="!item.image" name="image-outline"></ion-icon>
           </div>
-          <ion-label>{{item.name}}</ion-label>
+          <ion-label>{{item.nome}}</ion-label>
         </ion-item>
         <!-- === Options === -->
         <ion-item-options>
           <!-- Editar -->
-          <ion-item-option>
+          <ion-item-option (click)="addUpdateInspection(item)">
             <ion-icon class="option-btn" name="create-outline"></ion-icon>
           </ion-item-option>
           <!-- Deletar -->
-          <ion-item-option color="danger" side="start">
+          <ion-item-option color="danger" side="start" (click)="confirmDeleteInspection(item)">
             <ion-icon class="option-btn" name="trash-outline"></ion-icon>
           </ion-item-option>
         </ion-item-options>
@@ -34,7 +34,7 @@
 
   <!-- new inspection -->
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-    <ion-fab-button color="success">
+    <ion-fab-button color="success" (click)="addUpdateInspection()">
       <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>

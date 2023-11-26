@@ -6,7 +6,6 @@ import { IonicModule } from '@ionic/angular';
 import { HeaderComponent } from 'src/app/shared/components/header/header.component';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
-import { Inspection } from 'src/app/models/inspection.model';
 import { ModalController } from '@ionic/angular/standalone';
 import { InspectionAddPage } from 'src/app/shared/components/inspection-add/InspectionAddPage';
 import { Router, RouterLink } from '@angular/router';
@@ -24,7 +23,7 @@ export class InspectionListPage implements OnInit {
   title = "inspection"
   firebaseSvc = inject(FirebaseService);
   utilsSvc = inject(UtilsService);
-  inspections: Inspection[] = [];
+  inspections: any[] = [];
   modalCtrol = inject(ModalController);
   router = inject(Router);
 

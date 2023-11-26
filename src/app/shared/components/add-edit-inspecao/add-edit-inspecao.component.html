@@ -20,12 +20,12 @@
       </ion-button>
   
       <!-- name -->
-      <ion-item>
-        <ion-input label="Name" labelPlacement="floating" formControlName="name" type="text"></ion-input>
+       <ion-item>
+        <ion-input label="Name" labelPlacement="floating" formControlName="nome" type="text"></ion-input>
       </ion-item>
-      <div class="validators" *ngIf="form.controls.name.errors && form.controls.name.touched">
-        <div *ngIf="form.controls.name.errors?.['required']">Um nome é requerido!</div>
-        <div *ngIf="form.controls.name.errors?.['minLenght']">Qtd minimo é 0.</div>
+      <div class="validators" *ngIf="form.controls.nome.errors && form.controls.nome.touched">
+        <div *ngIf="form.controls.nome.errors?.['required']">Um nome é requerido!</div>
+        <div *ngIf="form.controls.nome.errors?.['minLenght']">Qtd minimo é 0.</div>
       </div>
   
       <br>
@@ -33,6 +33,6 @@
         {{inspecao ? 'Actualize Inspection':'Add Inspection'}}
         <ion-icon slot="end" name="checkmark-circle-outline"></ion-icon>
       </ion-button>
-    </form>
+    </form> 
 
 </ion-content>
