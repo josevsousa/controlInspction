@@ -1,33 +1,33 @@
 <app-header [page]="title" [isModal]="true"></app-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  
-    <h1>Inspection Add</h1>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <!-- ========== se existir uma imagem ========== -->
-      <div class="d-flex-center">
-        <ion-avatar *ngIf="form.value.image">
-          <img [src]="form.value.image" />
-        </ion-avatar>
-      </div>
-      <br>
-      <ion-button (click)="takeImage()" expand="block" fill="clear" shape="round">
-        Click me
-      </ion-button>
-      <!-- name -->
-       <ion-item>
-        <ion-input label="Name" labelPlacement="floating" formControlName="nome" type="text"></ion-input>
-      </ion-item>
-      <div class="validators" *ngIf="form.controls.nome.errors && form.controls.nome.touched">
-        <div *ngIf="form.controls.nome.errors?.['required']">Um nome é requerido!</div>
-        <div *ngIf="form.controls.nome.errors?.['minLenght']">Qtd minimo é 0.</div>
-      </div>
-  
-      <br>
-      <ion-button block color="primary" type="submit" [disabled]="form.invalid">
-        {{inspecao ? 'Actualize Inspection':'Add Inspection'}}
-        <ion-icon slot="end" name="checkmark-circle-outline"></ion-icon>
-      </ion-button>
-    </form> 
+
+  <h1>Inspection Add</h1>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <!-- ========== se existir uma imagem ========== -->
+    <div class="d-flex-center">
+      <ion-avatar *ngIf="form.value.image">
+        <img [src]="form.value.image" />
+      </ion-avatar>
+    </div>
+    <br>
+    <ion-button (click)="takeImage()" expand="block" fill="clear" shape="round">
+      Click me
+    </ion-button>
+    <!-- name -->
+    <ion-item>
+      <ion-input label="Name" labelPlacement="floating" formControlName="nome" type="text"></ion-input>
+    </ion-item>
+    <div class="validators" *ngIf="form.controls.nome.errors && form.controls.nome.touched">
+      <div *ngIf="form.controls.nome.errors?.['required']">Um nome é requerido!</div>
+      <div *ngIf="form.controls.nome.errors?.['minLenght']">Qtd minimo é 0.</div>
+    </div>
+
+    <br>
+    <ion-button block color="primary" type="submit" [disabled]="form.invalid">
+      {{inspecao ? 'Actualize Inspection':'Add Inspection'}}
+      <ion-icon slot="end" name="checkmark-circle-outline"></ion-icon>
+    </ion-button>
+  </form>
 
 </ion-content>

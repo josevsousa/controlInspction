@@ -3,9 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { Ambiente } from 'src/app/models/ambiente.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UtilsService } from 'src/app/services/utils.service';
 import { HeaderComponent } from 'src/app/shared/components/header/header.component';
+import { FirebaseService } from 'src/app/services/firebase.service';
+import { AddEditAmbienteComponent } from 'src/app/shared/components/add-edit-ambiente/add-edit-ambiente.component';
 
 @Component({
   selector: 'app-ambiente',
@@ -16,28 +18,56 @@ import { HeaderComponent } from 'src/app/shared/components/header/header.compone
 })
 export class AmbientePage implements OnInit {
 
-  //==================================== SERVICES
+  //=============== SERVICES
   activateRoute = inject(ActivatedRoute);
   utilsSvc = inject(UtilsService);
-  
-  //==================================== ATRIBUTOS
+  firebaseSvc = inject(FirebaseService);
+  router = inject(Router);
+
+  //=============== ATRIBUTOS
   title = "ambientes";
   uidInspecao!: string;
   uidUser!: string;
   path!: string;
-  environments: Ambiente[] = []; // LISTA ambientes
-
-  constructor() { }
+  ambientes: Ambiente[] = []; // LISTA ambientes
 
   ngOnInit() {
-       this.initAmbinent();
+    this.initAmbinent();
   }
 
-  initAmbinent(): void{
+  initAmbinent() {
     // uid da inspection
     this.uidInspecao = this.activateRoute.snapshot.params['uidInspecao'];
     this.uidUser = this.utilsSvc.getFromLocalStorage('user').uid;
     this.path = `users/${this.uidUser}/inspecoes/${this.uidInspecao}/ambientes`;
+  }
+
+  ionViewWillEnter() {
+    this.getInspections();
+  }
+  // === Obter inspections do firebase ===
+  async getInspections() {
+    return this.firebaseSvc.getColletionData(this.path).subscribe({
+      next: (resp: any) => {
+        this.ambientes = resp;
+      }
+    })
+  }
+
+  // ====== RouterLink =======  
+  routerLink(item: Ambiente) {
+    this.router.navigate(['/ambiente', item.uid]);
+  }
+
+  // === addUpdateInspecao ====
+  async addUpdateAmbientes(ambiente?: any) {
+    let teste = "teste ambiente";
+    let success = this.utilsSvc.presentMotal({
+      component: AddEditAmbienteComponent,
+      cssClass: 'edit-profile-modal',
+      componentProps: { ambiente, teste }
+    })
+    if (await success) this.getInspections()
   }
 
 }

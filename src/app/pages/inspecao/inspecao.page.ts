@@ -48,8 +48,7 @@ export class InspecaoPage implements OnInit {
   // === Obter inspections do firebase ===
   async getInspections() {
     let path = `users/${this.uidUser}/inspecoes`;
-    console.log(path);
-    let sub = this.firebaseSvc.getColletionData(path).subscribe({
+    return this.firebaseSvc.getColletionData(path).subscribe({
       next: (resp: any) => {
         this.inspecoes = resp;
       }
