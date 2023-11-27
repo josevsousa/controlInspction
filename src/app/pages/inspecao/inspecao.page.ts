@@ -9,7 +9,7 @@ import { AddEditInspecaoComponent } from 'src/app/shared/components/add-edit-ins
 import { UtilsService } from 'src/app/services/utils.service';
 import { Inspecao } from 'src/app/models/inspecao.model';
 import { FirebaseService } from 'src/app/services/firebase.service';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular/standalone';
 
 @Component({
@@ -28,7 +28,7 @@ export class InspecaoPage implements OnInit {
   router = inject(Router);
 
   //==================================== ATRIBUTOS
-  title: string = "inpecao";
+  title: string = "inspeções";
   path!: string;
   inspecoes: Inspecao[] = [];
   uidUser!: string;
@@ -57,15 +57,16 @@ export class InspecaoPage implements OnInit {
   }
   // ====== RouterLink =======  
   routerLink(item: Inspecao) {
-    this.router.navigate(['/ambiente', JSON.stringify(item.uid)]);
+    this.router.navigate(['/ambiente', item.uid]);
   }
 
   // === addUpdateInspecao ====
   async addUpdateInspection(inspecao?: any) {
+    let teste = "jos";
     let success = this.utilsSvc.presentMotal({
       component: AddEditInspecaoComponent,
       cssClass: 'edit-profile-modal',
-      componentProps: { inspecao }
+      componentProps: { inspecao, teste }
     })
     if (await success) this.getInspections()
   }

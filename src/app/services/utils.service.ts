@@ -91,7 +91,6 @@ export class UtilsService {
   // ============ Obtem um elemento no localstore  =============
   getFromLocalStorage(key: string) {
     return JSON.parse(localStorage.getItem(key)!);
-
   }
 
 

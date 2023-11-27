@@ -1,4 +1,4 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
@@ -16,14 +16,17 @@ import { FirebaseService } from 'src/app/services/firebase.service';
   imports: [IonicModule, CommonModule, FormsModule]
 
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
 
+  //==================================== SERVICES
+  utilSvc = inject(UtilsService);
+  firebaseSvc = inject(FirebaseService);
+
+  //==================================== ATRIBUTOS
   @Input() page!: string;
   @Input() backButton!: string;
   @Input() isModal!: boolean;
-
-  utilSvc = inject(UtilsService);
-  firebaseSvc = inject(FirebaseService);
+  photoUrl!: string;
 
 
   // ============ Router =============
@@ -35,9 +38,14 @@ export class HeaderComponent {
   dismissModal() {
     this.utilSvc.dismissModal();
   }
-  
+
+  ngOnInit() {
+    this.photoUrl = this.utilSvc.getFromLocalStorage('user').photoUrl;
+    console.log(this.photoUrl);
+  }
+
   //============ auth ==============
-  logOut(){
+  logOut() {
     return this.firebaseSvc.desconectarGoogle();
   }
 

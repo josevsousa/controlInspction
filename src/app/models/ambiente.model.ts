@@ -1,4 +1,4 @@
-export interface Environment {
+export interface Ambiente {
     uid:string,
     name:string,
     image:string,

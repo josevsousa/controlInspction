@@ -134,5 +134,18 @@ ion-avatar {
         border-radius: 10px;
         margin-left: 0;
     }
+
 }
 
+.avatar {
+    margin: 0 auto;
+    padding: 7px;
+    width: 64px !important;
+    height: 64px !important;
+    --border-radius: 8px !important;
+}
+.image-icon{
+    font-size: 57px;
+    opacity: 30%;
+    margin :0px 4px;
+}

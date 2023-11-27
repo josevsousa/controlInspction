@@ -94,8 +94,6 @@ export class FirebaseService {
   }
   // ==== Atualizar um documento ====
   updateDocument(path: string, data: any) {
-    console.log(path);
-    console.log(data);
     return updateDoc(doc(getFirestore(), path), data);
   }
   // ==== Add um documento com uid gerado pelo firebase ====

@@ -23,12 +23,6 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/ambiente/ambiente.page').then( m => m.AmbientePage),
     // canActivate: [AuthGuard]
   },
-
-  // {
-    // path: 'environment-list/:inspection',
-    // loadComponent: () => import('./pages/environment-list/environment-list.page').then( m => m.EnvironmentListPage),
-    // canActivate: [AuthGuard]
-  // },
   {
     path: '**',
     redirectTo: '/',

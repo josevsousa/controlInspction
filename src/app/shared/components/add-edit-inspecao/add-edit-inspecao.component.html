@@ -9,16 +9,11 @@
         <ion-avatar *ngIf="form.value.image">
           <img [src]="form.value.image" />
         </ion-avatar>
-  
-  
-        <!-- ========== se nao existir uma imagem ========== -->
-        <ion-icon class="image-icon" *ngIf="!form.value.image" name="image-outline"></ion-icon>
       </div>
       <br>
       <ion-button (click)="takeImage()" expand="block" fill="clear" shape="round">
         Click me
       </ion-button>
-  
       <!-- name -->
        <ion-item>
         <ion-input label="Name" labelPlacement="floating" formControlName="nome" type="text"></ion-input>

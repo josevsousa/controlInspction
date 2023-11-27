@@ -1,8 +1,10 @@
 <app-header [page]="title"></app-header>
 <ion-content [fullscreen]="true">
   <div class=" list-profile">
-    <h1>Ola {{title}}!</h1>
 
+    <div class="d-flex-center">
+      <h1>Modulo {{title}}!</h1>
+    </div>
     <ion-list>
       <ion-item-sliding class="{{item.uid}}" *ngFor="let item of inspecoes">
         <ion-item>
@@ -10,7 +12,7 @@
             <ion-icon name="arrow-forward-outline" color="medium" slot="icon-only"></ion-icon>
           </ion-buttons>
           <div class="d-flex-center">
-            <ion-avatar *ngIf="item.image">
+            <ion-avatar class="avatar" *ngIf="item.image">
               <img [src]="item.image" />
             </ion-avatar>
             <ion-icon class="image-icon" *ngIf="!item.image" name="image-outline"></ion-icon>
