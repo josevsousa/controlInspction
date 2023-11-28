@@ -26,7 +26,7 @@ export class HeaderComponent implements OnInit {
   @Input() page!: string;
   @Input() backButton!: string;
   @Input() isModal!: boolean;
-  photoUrl!: string;
+  user: any;
 
 
   // ============ Router =============
@@ -40,8 +40,8 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.photoUrl = this.utilSvc.getFromLocalStorage('user').photoUrl;
-    console.log(this.photoUrl);
+    this.user = this.utilSvc.getFromLocalStorage('user');
+    // console.log(this.user);
   }
 
   //============ auth ==============

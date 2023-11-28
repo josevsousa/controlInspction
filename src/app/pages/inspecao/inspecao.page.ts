@@ -31,13 +31,13 @@ export class InspecaoPage implements OnInit {
   title: string = "inspeções";
   path!: string;
   inspecoes: Inspecao[] = [];
-  uidUser!: string;
+  user: any;
 
   //==================================== COMPORTAMENTOS
   // === init === 
   ngOnInit() {
-    console.log("======= dentro de inspecao =======")
-    this.uidUser = this.utilsSvc.getFromLocalStorage('user').uid;
+    console.log("======= dentro de inspecao =======");
+    this.user = this.utilsSvc.getFromLocalStorage('user');
     this.getInspections();
   }
   ionViewWillEnter() {
@@ -47,7 +47,7 @@ export class InspecaoPage implements OnInit {
 
   // === Obter inspections do firebase ===
   async getInspections() {
-    let path = `users/${this.uidUser}/inspecoes`;
+    let path = `users/${this.user.uid}/inspecoes`;
     return this.firebaseSvc.getColletionData(path).subscribe({
       next: (resp: any) => {
         this.inspecoes = resp;
@@ -55,8 +55,10 @@ export class InspecaoPage implements OnInit {
     })
   }
   // ====== RouterLink =======  
-  routerLink(item: Inspecao) {
-    this.router.navigate(['/ambiente', item.uid]);
+  async routerLink(item: Inspecao) {
+    //add o item no localStorage
+    await this.utilsSvc.saveInLocalStorage('inspecao', item);
+    this.utilsSvc.routerLink('ambiente');
   }
 
   // === addUpdateInspecao ====
@@ -91,7 +93,7 @@ export class InspecaoPage implements OnInit {
 
   // === Deletar inspection do firebase  ===
   async deleleInspections(inspecao?: Inspecao) {
-    let path = `users/${this.uidUser}/inspecoes/${inspecao?.uid}`;
+    let path = `users/${this.user.uid}/inspecoes/${inspecao?.uid}`;
 
     const loading = await this.utilsSvc.loading();
     await loading.present();

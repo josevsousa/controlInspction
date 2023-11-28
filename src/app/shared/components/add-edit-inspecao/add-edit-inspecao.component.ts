@@ -15,14 +15,16 @@ import { Inspecao } from 'src/app/models/inspecao.model';
   styleUrls: ['./add-edit-inspecao.component.scss'],
 })
 export class AddEditInspecaoComponent implements OnInit {
-  title!: string;
-
-  @Input() inspecao: any;
-  @Input() teste: any;
+  // ========== SERVECES
   firebaseSvc = inject(FirebaseService);
   utilsSvc = inject(UtilsService);
-  uidUser!: string;
 
+
+  // ========== ATRIBUTOS
+  @Input() inspecao: any;
+  @Input() teste: any;
+  uidUser!: string;
+  title!: string;
   form = new FormGroup({
     uid: new FormControl(''),
     image: new FormControl('', Validators.required),
@@ -33,10 +35,11 @@ export class AddEditInspecaoComponent implements OnInit {
   });
 
 
+
+
   ngOnInit() {
     console.log('dentro da add-edit-inspecao');
     this.uidUser = this.utilsSvc.getFromLocalStorage('user').uid;
-    console.log(this.form.value)
     if (this.inspecao) {
       // recebeu uma inspecao
       this.form.setValue(this.inspecao);

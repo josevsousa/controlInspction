@@ -9,6 +9,7 @@
       <ion-avatar *ngIf="form.value.image">
         <img [src]="form.value.image" />
       </ion-avatar>
+      <ion-icon *ngIf="!form.value.image" slot="icon-only" class="image-icon" name="image-outline"></ion-icon>
     </div>
     <br>
     <ion-button (click)="takeImage()" expand="block" fill="clear" shape="round">

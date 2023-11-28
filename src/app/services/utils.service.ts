@@ -92,7 +92,10 @@ export class UtilsService {
   getFromLocalStorage(key: string) {
     return JSON.parse(localStorage.getItem(key)!);
   }
-
+  // ============ Deleta um elemento no localstore  =============
+  delFromLocalStorage(key: string) {
+    return localStorage.removeItem(key);
+  }
 
 
 }

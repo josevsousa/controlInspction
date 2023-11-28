@@ -1,14 +1,16 @@
 <app-header [page]="title" [backButton]="title"></app-header>
 
 <ion-content [fullscreen]="true">
-  <div class="d-flex-center">
-    <h1>Modulo {{title}}!</h1>
+  
+  <div class=" list-profile">
+  <div class="ion-text-center">
+    <h3>Inspeção: {{inspecao.nome}} <strong style="color:rgb(143, 143, 143)">/ Ambientes</strong></h3>
   </div>
-
+ 
   <ion-list>
     <ion-item-sliding class="{{item.uid}}" *ngFor="let item of ambientes">
       <ion-item>
-        <ion-buttons slot="end" (click)="routerLink(item)">
+        <ion-buttons slot="end">
           <ion-icon name="arrow-forward-outline" color="medium" slot="icon-only"></ion-icon>
         </ion-buttons>
         <div class="d-flex-center">
@@ -22,7 +24,7 @@
       <!-- === Options === -->
       <ion-item-options>
         <!-- Editar -->
-        <ion-item-option>
+        <ion-item-option (click)="addUpdateAmbientes(item)">
           <ion-icon class="option-btn" name="create-outline"></ion-icon>
         </ion-item-option>
         <!-- Deletar -->
@@ -32,12 +34,11 @@
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
-
   <!-- new inspection -->
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button color="success" (click)="addUpdateAmbientes()">
       <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-
+  </div>
 </ion-content>

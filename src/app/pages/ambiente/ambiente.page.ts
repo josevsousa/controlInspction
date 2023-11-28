@@ -9,6 +9,7 @@ import { HeaderComponent } from 'src/app/shared/components/header/header.compone
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { AddEditAmbienteComponent } from 'src/app/shared/components/add-edit-ambiente/add-edit-ambiente.component';
 
+
 @Component({
   selector: 'app-ambiente',
   templateUrl: './ambiente.page.html',
@@ -25,26 +26,33 @@ export class AmbientePage implements OnInit {
   router = inject(Router);
 
   //=============== ATRIBUTOS
-  title = "ambientes";
-  uidInspecao!: string;
+  title = "ambiente";
+  inspecao!: any;
   uidUser!: string;
   path!: string;
   ambientes: Ambiente[] = []; // LISTA ambientes
 
   ngOnInit() {
+    console.log("======= dentro de ambiente =======");
+    console.log(this.ambientes);
     this.initAmbinent();
   }
 
   initAmbinent() {
-    // uid da inspection
-    this.uidInspecao = this.activateRoute.snapshot.params['uidInspecao'];
+    // this.uidInspecao = this.activateRoute.snapshot.params['uidInspecao'];
+    this.inspecao = this.utilsSvc.getFromLocalStorage('inspecao');
     this.uidUser = this.utilsSvc.getFromLocalStorage('user').uid;
-    this.path = `users/${this.uidUser}/inspecoes/${this.uidInspecao}/ambientes`;
+    this.path = `users/${this.uidUser}/inspecoes/${this.inspecao.uid}/ambientes`;
   }
 
   ionViewWillEnter() {
     this.getInspections();
   }
+
+  ionViewWillLeave(){
+    this.utilsSvc.delFromLocalStorage('inspecao');
+  }
+
   // === Obter inspections do firebase ===
   async getInspections() {
     return this.firebaseSvc.getColletionData(this.path).subscribe({
@@ -54,10 +62,6 @@ export class AmbientePage implements OnInit {
     })
   }
 
-  // ====== RouterLink =======  
-  routerLink(item: Ambiente) {
-    this.router.navigate(['/ambiente', item.uid]);
-  }
 
   // === addUpdateInspecao ====
   async addUpdateAmbientes(ambiente?: any) {
