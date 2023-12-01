@@ -62,11 +62,10 @@ export class InspecaoPage implements OnInit {
 
   // === addUpdateInspecao ====
   async addUpdateInspection(inspecao?: any) {
-    let teste = "jos";
     let success = this.utilsSvc.presentMotal({
       component: AddEditInspecaoComponent,
       cssClass: 'edit-profile-modal',
-      componentProps: { inspecao, teste }
+      componentProps: { inspecao }
     })
     if (await success) this.getInspections()
   }

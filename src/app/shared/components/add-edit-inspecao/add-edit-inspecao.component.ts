@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, NonNullableFormBuilder, ReactiveFormsModule, UntypedFormBuilder,Validators } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { HeaderComponent } from '../header/header.component';
 import { FirebaseService } from 'src/app/services/firebase.service';
@@ -18,6 +18,8 @@ export class AddEditInspecaoComponent implements OnInit {
   // ========== SERVECES
   firebaseSvc = inject(FirebaseService);
   utilsSvc = inject(UtilsService);
+  // private formBuilderService = inject(FormBuilder);
+  // private formBuilderService = inject(NonNullableFormBuilder);
 
 
   // ========== ATRIBUTOS
@@ -25,7 +27,17 @@ export class AddEditInspecaoComponent implements OnInit {
   @Input() teste: any;
   uidUser!: string;
   title!: string;
-  form = new FormGroup({
+
+  // protected form = this.formBuilderService.group({
+  //   uid: [''],
+  //   image: ['', Validators.required],
+  //   ativo: [true],
+  //   nome: ['', Validators.required, Validators.min(0)],
+  //   data_inicio: [ Date.now() ],
+  //   data_fim: [ null ]
+  // });
+
+  protected form = new FormGroup({
     uid: new FormControl(''),
     image: new FormControl('', Validators.required),
     ativo: new FormControl(true),
@@ -35,6 +47,11 @@ export class AddEditInspecaoComponent implements OnInit {
   });
 
 
+testee(){
+  let x = (this.form.value);
+  
+  console.log(this.form.value);
+}
 
 
   ngOnInit() {
@@ -54,7 +71,15 @@ export class AddEditInspecaoComponent implements OnInit {
   //=========== Tirar/Selecionar Photo ==========
   async takeImage() {
     const dataUrl = (await this.utilsSvc.takePicture('Image do produto')).dataUrl;
+    // this.form.patchValue({image: dataUrl})
+    
+    // setValue tem que enviar todos os campos do form
+    // this.form.setValue({nome:'maria', uid: 'dfdfdfdf', ... etc}) 
+    // this.form.pathValue({nome: 'maria'}); //pode mudar apenas um valor dos campos do form
+
     this.form.controls.image.setValue(dataUrl!);
+
+    
   }
 
   onSubmit() {
@@ -82,6 +107,7 @@ export class AddEditInspecaoComponent implements OnInit {
     let imagePath = `${this.uidUser}/inspecao/${newUid}`;
     let imageUrl = await this.firebaseSvc.uploadImage(imagePath, dataUrl);
     this.form.controls.image.setValue(imageUrl);
+    // this.form.controls.image.setValue(imageUrl);
 
 
     // // ==== add inspecao
