@@ -4,21 +4,20 @@
   
   <div class=" list-profile">
   <div class="ion-text-center">
-    <h3>Inspeção: {{inspecao.nome}} <strong style="color:rgb(143, 143, 143)">/ Ambientes</strong></h3>
+    <h6>Inspeção:{{inspecao.nome}} / Ambientes</h6>
   </div>
  
-  <ion-list>
+  <ion-list lines="full">
     <ion-item-sliding class="{{item.uid}}" *ngFor="let item of ambientes">
       <ion-item>
-        <ion-buttons slot="end">
+        <ion-buttons slot="end" (click)="routerLink(item)">
           <ion-icon name="arrow-forward-outline" color="medium" slot="icon-only"></ion-icon>
         </ion-buttons>
         <div class="d-flex-center">
-          <ion-avatar class="avatar" *ngIf="item.image">
-            <img [src]="item.image" />
-          </ion-avatar>
-          <ion-icon class="image-icon" *ngIf="!item.image" name="image-outline"></ion-icon>
-        </div>
+            <ion-avatar class="avatar">
+              <img [src]="item.image" />
+            </ion-avatar>
+          </div>
         <ion-label>{{item.nome}}</ion-label>
       </ion-item>
       <!-- === Options === -->
@@ -28,7 +27,7 @@
           <ion-icon class="option-btn" name="create-outline"></ion-icon>
         </ion-item-option>
         <!-- Deletar -->
-        <ion-item-option color="danger" side="start">
+        <ion-item-option color="danger" side="start" (click)="confirmDeleteAmbiente(item)">
           <ion-icon class="option-btn" name="trash-outline"></ion-icon>
         </ion-item-option>
       </ion-item-options>

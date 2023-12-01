@@ -3,21 +3,21 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { Ambiente } from 'src/app/models/ambiente.model';
+import { Problema } from 'src/app/models/problema.model'
 import { ActivatedRoute, Router } from '@angular/router';
 import { UtilsService } from 'src/app/services/utils.service';
 import { HeaderComponent } from 'src/app/shared/components/header/header.component';
 import { FirebaseService } from 'src/app/services/firebase.service';
-import { AddEditAmbienteComponent } from 'src/app/shared/components/add-edit-ambiente/add-edit-ambiente.component';
-
+import { AddEditProblemaComponent } from 'src/app/shared/components/add-edit-problema/add-edit-problema.component';
 
 @Component({
-  selector: 'app-ambiente',
-  templateUrl: './ambiente.page.html',
-  styleUrls: ['./ambiente.page.scss'],
+  selector: 'app-problema',
+  templateUrl: './problema.page.html',
+  styleUrls: ['./problema.page.scss'],
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule, HeaderComponent]
 })
-export class AmbientePage implements OnInit {
+export class ProblemaPage implements OnInit {
 
   //=============== SERVICES
   activateRoute = inject(ActivatedRoute);
@@ -26,49 +26,47 @@ export class AmbientePage implements OnInit {
   router = inject(Router);
 
   //=============== ATRIBUTOS
-  title = "ambientes";
+  title = "problemas";
   inspecao!: any;
+  ambiente!: any;
   uidUser!: string;
   path!: string;
-  ambientes: Ambiente[] = []; // LISTA ambientes
+  problemas: any[] = []; // LISTA problemas
 
   ngOnInit() {
-    console.log("======= dentro de ambiente =======");
-    this.initAmbinent();
+    console.log("======= dentro de problema =======");
+    this.initProblema();
   }
 
-  initAmbinent() {
-    // this.uidInspecao = this.activateRoute.snapshot.params['uidInspecao'];
+  initProblema() {
     this.inspecao = this.utilsSvc.getFromLocalStorage('inspecao');
+    this.ambiente = this.utilsSvc.getFromLocalStorage('ambiente');
     this.uidUser = this.utilsSvc.getFromLocalStorage('user').uid;
-
-    // this.uidUser = JSON.stringify(this.firebaseSvc.getAuth().currentUser?.uid);
-    this.path = `users/${this.uidUser}/inspecoes/${this.inspecao.uid}/ambientes`;
+    this.path = `users/${this.uidUser}/inspecoes/${this.inspecao.uid}/ambientes/${this.ambiente.uid}/problemas`;
+    console.log("================? "+this.path);
   }
 
   ionViewWillEnter() {
     this.getInspections();
   }
 
-
-
+  
   // === Obter inspections do firebase ===
   async getInspections() {
     return this.firebaseSvc.getColletionData(this.path).subscribe({
       next: (resp: any) => {
-        this.ambientes = resp;
+        this.problemas = resp;
       }
     })
   }
 
 
-  // === addUpdateInspecao ====
-  async addUpdateAmbientes(ambiente?: any) {
-    let teste = "teste ambiente";
+  // === addUpdateProblema ====
+  async addUpdateProblema(problema?: any) {
     let success = this.utilsSvc.presentMotal({
-      component: AddEditAmbienteComponent,
+      component: AddEditProblemaComponent,
       cssClass: 'edit-profile-modal',
-      componentProps: { ambiente, teste }
+      componentProps: { problema }
     })
     if (await success) this.getInspections()
   }
@@ -76,16 +74,15 @@ export class AmbientePage implements OnInit {
   // ====== RouterLink =======  
   async routerLink(item: Ambiente) {
     //add o item no localStorage
-    await this.utilsSvc.saveInLocalStorage('ambiente', item);
+    await this.utilsSvc.saveInLocalStorage('problema', item);
     this.utilsSvc.routerLink('problema');
   }
 
   
-  
   // ====== Confirmar evento de delete ======
-  async confirmDeleteAmbiente(ambiente: Ambiente) {
+  async confirmDeleteProblema(problema: Problema) {
     this.utilsSvc.presentAlert({
-      header: 'Deletar Ambiente',
+      header: 'Deletar problema',
       message: 'Deseja mesmo deletar?',
       mode: 'ios',
       buttons: [{
@@ -94,28 +91,28 @@ export class AmbientePage implements OnInit {
       {
         text: 'Sim Deletar',
         handler: () => {
-          this.deleleAmbiente(ambiente);
+          this.deleleProblema(problema);
         }
       }]
     })
   }
 
   // === Deletar inspection do firebase  ===
-  async deleleAmbiente(ambiente?: Ambiente) {
-    let path = `${this.path}/${ambiente?.uid}`;
+  async deleleProblema(problema?: Problema) {
+    let path = `${this.path}/${problema?.uid}`;
 
     const loading = await this.utilsSvc.loading();
     await loading.present();
 
     // ====== deletar img ======
-    let imagePath = await this.firebaseSvc.getFilePath(ambiente!.image);
+    let imagePath = await this.firebaseSvc.getFilePath(problema!.image);
     await this.firebaseSvc.deletarFile(imagePath);
 
     this.firebaseSvc.deletarDocument(path)
       .then(async res => {
         // toast alerta 
         this.utilsSvc.presentToast({
-          message: "Ambiente Eliminado!",
+          message: "Problema Eliminado!",
           duration: 1500,
           color: 'success',
           position: 'middle',
@@ -135,6 +132,5 @@ export class AmbientePage implements OnInit {
       });
 
   }
-
 
 }

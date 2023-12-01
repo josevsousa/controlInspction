@@ -121,4 +121,10 @@ export class FirebaseService {
       return deleteObject(ref(getStorage(), path));
     }
 
+    // =============== qtd de arquiovos =================
+    async contaRegistros(path: string){
+      let qtd = '4';
+      return qtd;
+    }
+
 }

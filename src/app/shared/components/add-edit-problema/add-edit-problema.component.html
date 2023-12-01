@@ -1,0 +1,37 @@
+<app-header [page]="title" [isModal]="true"></app-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="d-flex-center">
+    <h1>Modulo {{title}}!</h1>
+  </div>
+
+  <form [formGroup]="formProblema" (ngSubmit)="onSubmit()">
+    <!-- ========== se existir uma imagem ========== -->
+    <div class="d-flex-center">
+      <ion-avatar *ngIf="formProblema.value.image">
+        <img [src]="formProblema.value.image" />
+      </ion-avatar>
+      <ion-icon *ngIf="!formProblema.value.image" slot="icon-only" class="image-icon" name="image-outline"></ion-icon>
+   
+    </div>
+    <br>
+    <ion-button (click)="takeImage()" expand="block" fill="clear" shape="round">
+      Click me
+    </ion-button>
+    <!-- name -->
+    <ion-item>
+      <ion-input label="Name" labelPlacement="floating" formControlName="nome" type="text"></ion-input>
+    </ion-item>
+    <div class="validators" *ngIf="formProblema.controls.nome.errors && formProblema.controls.nome.touched">
+      <div *ngIf="formProblema.controls.nome.errors?.['required']">Um nome é requerido!</div>
+      <div *ngIf="formProblema.controls.nome.errors?.['minLenght']">Qtd minimo é 0.</div>
+    </div>
+
+    <br>
+    <ion-button block color="primary" type="submit" [disabled]="formProblema.invalid">
+      {{title}}
+      <ion-icon slot="end" name="checkmark-circle-outline"></ion-icon>
+    </ion-button>
+  </form>
+  
+</ion-content>

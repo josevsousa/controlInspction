@@ -5,19 +5,25 @@
     <div class="d-flex-center">
       <h1>Inspeçôes: {{user.name}}!</h1>
     </div>
-    <ion-list>
+    <ion-list lines="full">
       <ion-item-sliding class="{{item.uid}}" *ngFor="let item of inspecoes">
         <ion-item>
+          
           <ion-buttons slot="end" (click)="routerLink(item)">
+            <!--  -->
+            @if (qtdAmbientes) {
+            <ion-label>Ambientes:</ion-label>
+            <ion-badge >{{qtdAmbientes}}</ion-badge>  
+           }
             <ion-icon name="arrow-forward-outline" color="medium" slot="icon-only"></ion-icon>
           </ion-buttons>
           <div class="d-flex-center">
             <ion-avatar class="avatar" *ngIf="item.image">
               <img [src]="item.image" />
             </ion-avatar>
-            <ion-icon class="image-icon" *ngIf="!item.image" name="image-outline"></ion-icon>
+            <ion-icon class="image-icon" name="image-outline" *ngIf="!item.image"></ion-icon>
           </div>
-          <ion-label>{{item.nome}}</ion-label>
+          <ion-label id="teste">{{item.nome}}</ion-label>
         </ion-item>
         <!-- === Options === -->
         <ion-item-options>

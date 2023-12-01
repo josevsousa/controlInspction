@@ -1,0 +1,44 @@
+<app-header [page]="title" ></app-header>
+
+<ion-content [fullscreen]="true">
+  <div class=" list-profile">
+    <div class="ion-text-center">
+      <h6>{{inspecao.nome}} / {{ambiente.nome}} / problemas:</h6>
+    </div>
+
+    <ion-list  lines="full">
+      <ion-item-sliding class="{{item.uid}}" *ngFor="let item of problemas">
+        <ion-item>
+          <!-- <ion-buttons slot="end" (click)="routerLink(item)">
+            <ion-icon name="arrow-forward-outline" color="medium" slot="icon-only"></ion-icon>
+          </ion-buttons> -->
+          <div class="d-flex-center">
+              <ion-avatar class="avatar">
+                <img [src]="item.image" />
+              </ion-avatar>
+            </div>
+          <ion-label>{{item.nome}}</ion-label>
+        </ion-item>
+        <!-- === Options === -->
+        <ion-item-options>
+          <!-- Editar -->
+          <ion-item-option (click)="addUpdateProblema(item)">
+            <ion-icon class="option-btn" name="create-outline"></ion-icon>
+          </ion-item-option>
+          <!-- Deletar --> 
+          <ion-item-option color="danger" side="start" (click)="confirmDeleteProblema(item)">
+            <ion-icon class="option-btn" name="trash-outline"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>    
+
+
+    <!-- new inspection -->
+    <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+      <ion-fab-button color="success" (click)="addUpdateProblema()">
+        <ion-icon name="add-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  </div>
+</ion-content>

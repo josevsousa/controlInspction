@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { FormControl, FormGroup, FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
@@ -17,7 +17,7 @@ import { ModalController } from '@ionic/angular/standalone';
   templateUrl: './inspecao.page.html',
   styleUrls: ['./inspecao.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HeaderComponent]
+  imports: [IonicModule, CommonModule, FormsModule, HeaderComponent, NgOptimizedImage]
 })
 export class InspecaoPage implements OnInit {
 
@@ -26,12 +26,14 @@ export class InspecaoPage implements OnInit {
   firebaseSvc = inject(FirebaseService);
   modalCtrol = inject(ModalController);
   router = inject(Router);
+  teste!: any;
 
   //==================================== ATRIBUTOS
   title: string = "inspeções";
   path!: string;
   inspecoes: Inspecao[] = [];
   user: any;
+  qtdAmbientes!: string;
 
   //==================================== COMPORTAMENTOS
   // === init === 
@@ -39,26 +41,23 @@ export class InspecaoPage implements OnInit {
     console.log("======= dentro de inspecao =======");
     this.user = this.utilsSvc.getFromLocalStorage('user');
     this.getInspections();
+    this.getQtdAmbientes().then((resp)=>{
+      this.qtdAmbientes = resp;
+    });
+    
   }
   ionViewWillEnter() {
     this.getInspections();
   }
 
-
   // === Obter inspections do firebase ===
   async getInspections() {
     let path = `users/${this.user.uid}/inspecoes`;
-    return this.firebaseSvc.getColletionData(path).subscribe({
+    return await this.firebaseSvc.getColletionData(path).subscribe({
       next: (resp: any) => {
         this.inspecoes = resp;
       }
     })
-  }
-  // ====== RouterLink =======  
-  async routerLink(item: Inspecao) {
-    //add o item no localStorage
-    await this.utilsSvc.saveInLocalStorage('inspecao', item);
-    this.utilsSvc.routerLink('ambiente');
   }
 
   // === addUpdateInspecao ====
@@ -70,6 +69,13 @@ export class InspecaoPage implements OnInit {
       componentProps: { inspecao, teste }
     })
     if (await success) this.getInspections()
+  }
+
+  // ====== RouterLink =======  
+  async routerLink(item: Inspecao) {
+    //add o item no localStorage
+    await this.utilsSvc.saveInLocalStorage('inspecao', item);
+    this.utilsSvc.routerLink('ambiente');
   }
 
 
@@ -126,4 +132,10 @@ export class InspecaoPage implements OnInit {
       });
 
   }
+
+   // busca qtd de ambientes
+   async getQtdAmbientes(){
+    return await this.firebaseSvc.contaRegistros('teste');
+  }
+  
 }

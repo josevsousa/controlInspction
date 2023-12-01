@@ -21,13 +21,19 @@ export const routes: Routes = [
   {
     path: 'ambiente',
     loadComponent: () => import('./pages/ambiente/ambiente.page').then( m => m.AmbientePage),
-    // canActivate: [AuthGuard]
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'problema',
+    loadComponent: () => import('./pages/problema/problema.page').then( m => m.ProblemaPage),
+    canActivate: [AuthGuard]
   },
   {
     path: '**',
     redirectTo: '/',
     pathMatch: 'full'
   }
+
 
 
 ];
