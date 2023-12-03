@@ -1,11 +1,10 @@
 import { Component, OnInit, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormControl, FormGroup, FormsModule, NonNullableFormBuilder, ReactiveFormsModule, UntypedFormBuilder,Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule,Validators } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { HeaderComponent } from '../header/header.component';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
-import { Inspecao } from 'src/app/models/inspecao.model';
 
 @Component({
   selector: 'app-add-edit-inspecao',
@@ -18,24 +17,12 @@ export class AddEditInspecaoComponent implements OnInit {
   // ========== SERVECES
   firebaseSvc = inject(FirebaseService);
   utilsSvc = inject(UtilsService);
-  // private formBuilderService = inject(FormBuilder);
-  // private formBuilderService = inject(NonNullableFormBuilder);
-
 
   // ========== ATRIBUTOS
   @Input() inspecao: any;
   @Input() teste: any;
   uidUser!: string;
   title!: string;
-
-  // protected form = this.formBuilderService.group({
-  //   uid: [''],
-  //   image: ['', Validators.required],
-  //   ativo: [true],
-  //   nome: ['', Validators.required, Validators.min(0)],
-  //   data_inicio: [ Date.now() ],
-  //   data_fim: [ null ]
-  // });
 
   protected form = new FormGroup({
     uid: new FormControl(''),
@@ -45,14 +32,6 @@ export class AddEditInspecaoComponent implements OnInit {
     data_inicio: new FormControl(Date.now()),
     data_fim: new FormControl(null)
   });
-
-
-testee(){
-  let x = (this.form.value);
-  
-  console.log(this.form.value);
-}
-
 
   ngOnInit() {
     console.log('dentro da add-edit-inspecao');
@@ -71,15 +50,7 @@ testee(){
   //=========== Tirar/Selecionar Photo ==========
   async takeImage() {
     const dataUrl = (await this.utilsSvc.takePicture('Image do produto')).dataUrl;
-    // this.form.patchValue({image: dataUrl})
-    
-    // setValue tem que enviar todos os campos do form
-    // this.form.setValue({nome:'maria', uid: 'dfdfdfdf', ... etc}) 
-    // this.form.pathValue({nome: 'maria'}); //pode mudar apenas um valor dos campos do form
-
     this.form.controls.image.setValue(dataUrl!);
-
-    
   }
 
   onSubmit() {

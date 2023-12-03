@@ -39,7 +39,8 @@ export class InspecaoPage implements OnInit {
   // === init === 
   ngOnInit() {
     console.log("======= dentro de inspecao =======");
-    this.user = this.utilsSvc.getFromLocalStorage('user');
+    // this.user = this.utilsSvc.getFromLocalStorage('user');
+    this.user = this.firebaseSvc.getAuth().currentUser;
     this.getInspections();
     this.getQtdAmbientes().then((resp)=>{
       this.qtdAmbientes = resp;
