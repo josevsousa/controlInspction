@@ -40,8 +40,9 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.user = this.utilSvc.getFromLocalStorage('user');
-    // console.log(this.user);
+    // this.user = this.utilSvc.getFromLocalStorage('user');
+    this.user = this.firebaseSvc.getAuth().currentUser;
+
   }
 
   //============ auth ==============

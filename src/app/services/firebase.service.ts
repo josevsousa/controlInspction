@@ -53,7 +53,7 @@ export class FirebaseService {
                 ativo: true
               }).then(user => {
                 // === gravar no localStorage
-                this.utilsSvc.saveInLocalStorage('user', resp);
+                 this.utilsSvc.saveInLocalStorage('user', resp);
               }).catch(err => console.log(err));
             } else {
               console.log('nao existe o user no db!');
@@ -73,7 +73,7 @@ export class FirebaseService {
   // ====== desconectar Usuario ====
   desconectarGoogle() {
     this.auth.signOut().then(()=> {
-      localStorage.removeItem('user');
+      localStorage.clear();
       this.utilsSvc.routerLink('/auth');
     });
   }
