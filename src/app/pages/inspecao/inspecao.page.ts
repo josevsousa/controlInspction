@@ -11,6 +11,7 @@ import { Inspecao } from 'src/app/models/inspecao.model';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular/standalone';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-inspecao',
@@ -31,7 +32,10 @@ export class InspecaoPage implements OnInit {
   //==================================== ATRIBUTOS
   title: string = "inspeções";
   path!: string;
-  inspecoes: Inspecao[] = [];
+  
+  //inspecoes: Inspecao[] = [];  //trocar para tipo async para evitar vazamento de memoria
+  inspecoes$ = new Observable<any[]>();
+
   user: any;
   qtdAmbientes!: string;
 
@@ -54,13 +58,14 @@ export class InspecaoPage implements OnInit {
   }
 
   // === Obter inspections do firebase ===
-  async getInspections() {
+  getInspections() {
     let path = `users/${this.user.uid}/inspecoes`;
-    return await this.firebaseSvc.getColletionData(path).subscribe({
-      next: (resp: any) => {
-        this.inspecoes = resp;
-      }
-    })
+    // return await this.firebaseSvc.getColletionData(path).subscribe({
+    //   next: (resp: any) => {
+    //     this.inspecoes = resp;
+    //   }
+    // })
+    this.inspecoes$ = this.firebaseSvc.getColletionData(path);
   }
 
   // === addUpdateInspecao ====

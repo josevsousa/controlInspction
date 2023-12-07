@@ -9,6 +9,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { HeaderComponent } from 'src/app/shared/components/header/header.component';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { AddEditProblemaComponent } from 'src/app/shared/components/add-edit-problema/add-edit-problema.component';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-problema',
@@ -31,7 +32,8 @@ export class ProblemaPage implements OnInit {
   ambiente!: any;
   uidUser!: string;
   path!: string;
-  problemas: any[] = []; // LISTA problemas
+  // problemas: any[] = []; // LISTA problemas
+  problemas$ = new Observable<any[]>();
 
   ngOnInit() {
     console.log("======= dentro de problema =======");
@@ -52,12 +54,13 @@ export class ProblemaPage implements OnInit {
 
   
   // === Obter inspections do firebase ===
-  async getInspections() {
-    return this.firebaseSvc.getColletionData(this.path).subscribe({
-      next: (resp: any) => {
-        this.problemas = resp;
-      }
-    })
+  getInspections() {
+    // return this.firebaseSvc.getColletionData(this.path).subscribe({
+    //   next: (resp: any) => {
+    //     this.problemas = resp;
+    //   }
+    // })
+    this.problemas$ = this.firebaseSvc.getColletionData(this.path);
   }
 
 

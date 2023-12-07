@@ -8,6 +8,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { HeaderComponent } from 'src/app/shared/components/header/header.component';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { AddEditAmbienteComponent } from 'src/app/shared/components/add-edit-ambiente/add-edit-ambiente.component';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -30,7 +31,8 @@ export class AmbientePage implements OnInit {
   inspecao!: any;
   uidUser!: string;
   path!: string;
-  ambientes: Ambiente[] = []; // LISTA ambientes
+  // ambientes: Ambiente[] = []; // LISTA ambientes
+  ambientes$ = new Observable<any[]>();
 
   ngOnInit() {
     console.log("======= dentro de ambiente =======");
@@ -53,12 +55,13 @@ export class AmbientePage implements OnInit {
 
 
   // === Obter inspections do firebase ===
-  async getInspections() {
-    return this.firebaseSvc.getColletionData(this.path).subscribe({
-      next: (resp: any) => {
-        this.ambientes = resp;
-      }
-    })
+  getInspections() {
+    // return this.firebaseSvc.getColletionData(this.path).subscribe({
+    //   next: (resp: any) => {
+    //     this.ambientes = resp;
+    //   }
+    // })
+    this.ambientes$ = this.firebaseSvc.getColletionData(this.path);
   }
 
 
